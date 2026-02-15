@@ -1,0 +1,9 @@
+# Ignore build outputs
+build/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Sphinx temporary files
+.doctrees/

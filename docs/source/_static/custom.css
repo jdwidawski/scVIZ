@@ -1,0 +1,67 @@
+/* Custom CSS for scVIZ documentation
+ * Copyright (c) 2026 Jakub Widawski
+ */
+
+/* Primary accent color matching Streamlit */
+:root {
+    --accent-color: #ff4b4b;
+    --accent-light: #ff6b6b;
+}
+
+/* Customize the left navigation background */
+.wy-side-nav-search {
+    background-color: #1f1f1f;
+}
+
+.wy-side-nav-search a.icon-home {
+    color: #ffffff;
+}
+
+.wy-side-nav-search input[type=text] {
+    border-color: var(--accent-color);
+}
+
+/* Style links with accent color */
+a {
+    color: var(--accent-color);
+}
+
+a:hover {
+    color: var(--accent-light);
+}
+
+/* Code block styling */
+.highlight {
+    background: #f8f8f8;
+    border-radius: 4px;
+}
+
+/* Navigation styling */
+.wy-nav-content {
+    max-width: 900px;
+}
+
+/* Table styling */
+table.docutils {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.docutils td, table.docutils th {
+    padding: 8px 12px;
+    border: 1px solid #e1e4e5;
+}
+
+/* Feature boxes */
+.admonition {
+    border-radius: 4px;
+}
+
+.admonition.note {
+    border-left-color: var(--accent-color);
+}
+
+/* Badge styling */
+img.badge {
+    margin-right: 4px;
+}

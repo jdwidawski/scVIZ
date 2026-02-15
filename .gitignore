@@ -42,3 +42,5 @@ docs/build/
 # OS files
 .DS_Store
 Thumbs.db
+.python-version
+datasets.csv

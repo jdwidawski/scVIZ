@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+dist/
+build/
+
+# UV
+.uv/
+uv.lock
+
+# Data files
+data/
+*.h5ad
+*.h5
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Documentation build
+docs/build/
+
+# OS files
+.DS_Store
+Thumbs.db

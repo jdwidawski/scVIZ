@@ -2,8 +2,8 @@
 
 **Interactive Single-Cell RNA-Sequencing Data Visualization and Analysis Tool**
 
-[![Tests](https://github.com/jakub-widawski/scviz/actions/workflows/tests.yml/badge.svg)](https://github.com/jakub-widawski/scviz/actions/workflows/tests.yml)
-[![Documentation](https://github.com/jakub-widawski/scviz/actions/workflows/docs.yml/badge.svg)](https://jakub-widawski.github.io/scviz/)
+[![Tests](https://github.com/jdwidawski/scVIZ/actions/workflows/tests.yml/badge.svg)](https://github.com/jdwidawski/scVIZ/actions/workflows/tests.yml)
+[![Documentation](https://github.com/jdwidawski/scVIZ/actions/workflows/docs.yml/badge.svg)](https://jdwidawski.github.io/scVIZ/)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -53,8 +53,8 @@ scVIZ is a Streamlit-based interactive application for exploring and analyzing s
 
 ```bash
 # Clone the repository
-git clone https://github.com/jakub-widawski/scviz.git
-cd scviz
+git clone https://github.com/jdwidawski/scVIZ.git
+cd scVIZ
 
 # Create virtual environment and install dependencies (using UV)
 uv venv
@@ -77,7 +77,7 @@ The app will open in your browser at `http://localhost:8501`.
 
 ## 📖 Documentation
 
-Full documentation is available at [jakub-widawski.github.io/scviz/](https://jakub-widawski.github.io/scviz/)
+Full documentation is available at [jdwidawski.github.io/scVIZ/](https://jdwidawski.github.io/scVIZ/)
 
 ## 🧪 Running Tests
 
@@ -150,7 +150,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Jakub Widawski**
 
-- GitHub: [@jakub-widawski](https://github.com/jakub-widawski)
+- GitHub: [@jdwidawski](https://github.com/jdwidawski)
 
 ## 🙏 Acknowledgments
 

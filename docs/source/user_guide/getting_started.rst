@@ -18,8 +18,8 @@ Using UV (Recommended)
 .. code-block:: bash
 
    # Clone the repository
-   git clone https://github.com/yourusername/scrnaseq-workflow.git
-   cd scrnaseq-workflow
+   git clone https://github.com/jdwidawski/scVIZ.git
+   cd scVIZ
 
    # Create and activate virtual environment
    uv venv
@@ -34,8 +34,8 @@ Using Pip
 .. code-block:: bash
 
    # Clone the repository
-   git clone https://github.com/yourusername/scrnaseq-workflow.git
-   cd scrnaseq-workflow
+   git clone https://github.com/jdwidawski/scVIZ.git
+   cd scVIZ
 
    # Create and activate virtual environment
    python -m venv .venv

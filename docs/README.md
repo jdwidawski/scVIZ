@@ -67,7 +67,7 @@ If setting up for the first time:
 1. Go to your repository Settings → Pages
 2. Set Source to "GitHub Actions"
 3. Push to `main` branch to trigger deployment
-4. Documentation will be available at: `https://yourusername.github.io/scrnaseq-workflow/`
+4. Documentation will be available at: `https://jdwidawski.github.io/scVIZ/`
 
 ### Workflow
 

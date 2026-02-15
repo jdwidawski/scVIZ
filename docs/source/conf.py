@@ -47,7 +47,7 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 # GitHub Pages configuration
-html_baseurl = 'https://jakub-widawski.github.io/scviz/'
+html_baseurl = 'https://jdwidawski.github.io/scVIZ/'
 
 # Theme options for ReadTheDocs theme
 html_theme_options = {

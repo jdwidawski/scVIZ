@@ -17,9 +17,10 @@ build/
 uv.lock
 
 # Data files
-data/
-*.h5ad
-*.h5
+data/*.h5ad
+data/*.h5
+!data/available_datasets.csv
+.~lock.*
 
 # IDE
 .vscode/

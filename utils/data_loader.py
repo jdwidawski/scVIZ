@@ -93,14 +93,23 @@ def load_dataset_from_file(file_path: Union[str, Path, object]) -> Optional[AnnD
         
         # Handle file-like objects (from Streamlit uploader)
         elif hasattr(file_path, 'read'):
-            adata = sc.read_h5ad(file_path)
+            # Check file name extension if available
+            file_name = getattr(file_path, 'name', '')
+            if file_name.endswith('.h5'):
+                adata = sc.read_10x_h5(file_path)
+            else:
+                adata = sc.read_h5ad(file_path)
         
         # Handle file paths
         else:
             file_path = Path(file_path)
             if not file_path.exists():
                 raise FileNotFoundError(f"File not found: {file_path}")
-            adata = sc.read_h5ad(file_path)
+            # Determine file type from extension
+            if str(file_path).endswith('.h5'):
+                adata = sc.read_10x_h5(file_path)
+            else:
+                adata = sc.read_h5ad(file_path)
         
         return adata
     

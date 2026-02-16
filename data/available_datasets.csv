@@ -1,0 +1,4 @@
+dataset_title,dataset_description,n_cells,n_genes,data_path
+Kang et al. (2018),Peripheral Blood Mononuclear Cells (PBMCs) from 8 lupus patients. Control vs. Interferon-beta (IFN-) treated. DOI: 10.1038/nbt.4042,24673,15706,./data/kang.h5ad
+Kim et al. (2020) - Downsampled for demo purposes,Single-cell transcriptome profiling of metastatic lung adenocarcinoma. DOI: 10.1038/s41467-020-16164-1.,29000,10000,./data/kim.h5ad
+Mulder et al. (2021) - Downsampled for demo purposes,Cross-tissue single-cell landscape of human monocytes and macrophages in health and disease. DOI: 10.1016/j.immuni.2021.07.007,24000,10000,./data/mulder.h5ad

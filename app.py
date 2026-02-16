@@ -14,90 +14,45 @@ from utils.data_loader import (
 )
 from modules import explore_dataset, visualize_dataset, differential_expression, quality_control
 
-# Curated example datasets from tutorials and papers
-# All datasets have pre-computed UMAP embeddings and are human scRNA-seq
-EXAMPLE_DATASETS = pd.DataFrame([
-    {
-        'Name': 'PBMC 3k (10x Genomics)',
-        'Cells': '~2,700',
-        'Tissue': 'Peripheral Blood',
-        'Description': '3k PBMCs from 10x Genomics, processed',
-        'Source': 'Scanpy Tutorial / CZI cellxgene',
-        'URL': 'https://raw.githubusercontent.com/chanzuckerberg/cellxgene/main/example-dataset/pbmc3k.h5ad'
-    },
-    {
-        'Name': 'PBMC 68k Reduced',
-        'Cells': '~700',
-        'Tissue': 'Peripheral Blood',
-        'Description': '68k PBMCs subsampled to 700 cells with 765 HVGs',
-        'Source': 'Scanpy Datasets / 10x Genomics',
-        'URL': 'https://github.com/scverse/scanpy/raw/main/src/scanpy/datasets/10x_pbmc68k_reduced.h5ad'
-    },
-    {
-        'Name': 'Human Bone Marrow',
-        'Cells': '~35,000',
-        'Tissue': 'Bone Marrow',
-        'Description': 'Human bone marrow cells from multiple donors',
-        'Source': 'sc-best-practices.org (Theis Lab)',
-        'URL': 'https://figshare.com/ndownloader/files/40014331'
-    },
-    {
-        'Name': 'Human Lung (Tabula Sapiens)',
-        'Cells': '~24,000',
-        'Tissue': 'Lung',
-        'Description': 'Human lung cells from Tabula Sapiens',
-        'Source': 'Tabula Sapiens Consortium',
-        'URL': 'https://figshare.com/ndownloader/files/43794699'
-    },
-    {
-        'Name': 'Human Heart',
-        'Cells': '~18,000',
-        'Tissue': 'Heart',
-        'Description': 'Human heart cells atlas',
-        'Source': 'Heart Cell Atlas',
-        'URL': 'https://figshare.com/ndownloader/files/39546196'
-    },
-    {
-        'Name': 'Human Pancreas (Baron)',
-        'Cells': '~8,500',
-        'Tissue': 'Pancreas',
-        'Description': 'Human pancreatic islet cells',
-        'Source': 'Baron et al. 2016 (Cell Systems)',
-        'URL': 'https://figshare.com/ndownloader/files/24539828'
-    },
-    {
-        'Name': 'Human PBMC (COVID-19)',
-        'Cells': '~7,000',
-        'Tissue': 'Peripheral Blood',
-        'Description': 'PBMCs from COVID-19 patients',
-        'Source': 'Wilk et al. 2020 (Nature Medicine)',
-        'URL': 'https://figshare.com/ndownloader/files/25717328'
-    },
-    {
-        'Name': 'Human Kidney',
-        'Cells': '~25,000',
-        'Tissue': 'Kidney',
-        'Description': 'Human kidney cells from multiple donors',
-        'Source': 'Stewart et al. 2019 (Science)',
-        'URL': 'https://figshare.com/ndownloader/files/39546208'
-    },
-    {
-        'Name': 'Human Brain (Prefrontal Cortex)',
-        'Cells': '~15,000',
-        'Tissue': 'Brain',
-        'Description': 'Human prefrontal cortex neurons',
-        'Source': 'Allen Brain Atlas',
-        'URL': 'https://figshare.com/ndownloader/files/39546202'
-    },
-    {
-        'Name': 'Human Liver',
-        'Cells': '~10,000',
-        'Tissue': 'Liver',
-        'Description': 'Human liver cells from healthy donors',
-        'Source': 'MacParland et al. 2018 (Nature Communications)',
-        'URL': 'https://figshare.com/ndownloader/files/39546205'
-    },
-])
+# Load example datasets from CSV file
+# Paths in the CSV are relative to the root directory
+def load_example_datasets() -> pd.DataFrame:
+    """Load example datasets from CSV file."""
+    csv_path = './data/available_datasets.csv'
+    try:
+        df = pd.read_csv(csv_path)
+        
+        # Check if using old format and convert to new format
+        if 'dataset_title' in df.columns:
+            # Old format: dataset_title, dataset_description, n_cells, n_genes, data_path
+            df = df.rename(columns={
+                'dataset_title': 'Name',
+                'dataset_description': 'Description',
+                'n_cells': 'Cells',
+                'data_path': 'URL'
+            })
+            # Add missing columns with defaults
+            if 'Tissue' not in df.columns:
+                df['Tissue'] = 'N/A'
+            if 'Source' not in df.columns:
+                df['Source'] = 'Local Dataset'
+            # Format cell counts
+            df['Cells'] = df['Cells'].apply(lambda x: f"~{x:,}" if pd.notna(x) else 'N/A')
+        
+        # Ensure URL column uses correct paths (should already be relative)
+        if 'URL' in df.columns:
+            # Paths are already relative to root, no need to prepend ./data/
+            pass
+        
+        return df
+    except FileNotFoundError:
+        st.warning(f"Could not find {csv_path}. Using empty dataset list.")
+        return pd.DataFrame(columns=['Name', 'Cells', 'Tissue', 'Description', 'Source', 'URL'])
+    except Exception as e:
+        st.error(f"Error loading example datasets: {e}")
+        return pd.DataFrame(columns=['Name', 'Cells', 'Tissue', 'Description', 'Source', 'URL'])
+
+EXAMPLE_DATASETS = load_example_datasets()
 
 
 def apply_custom_css():
@@ -436,9 +391,9 @@ def display_dataset_loading() -> None:
         st.markdown("Upload an AnnData object in h5ad format from your computer.")
         
         uploaded_file = st.file_uploader(
-            "Choose an h5ad file",
-            type=['h5ad'],
-            help="Upload an AnnData object in h5ad format"
+            "Choose an h5ad or h5 file",
+            type=['h5ad', 'h5'],
+            help="Upload an AnnData object in h5ad format or 10x h5 format"
         )
         
         if uploaded_file is not None:

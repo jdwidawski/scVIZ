@@ -48,7 +48,7 @@ def load_example_datasets() -> pd.DataFrame:
         # Format cell counts with commas
         if 'Cells' in df.columns:
             df['Cells'] = df['Cells'].apply(
-                lambda x: f"~{int(x):,}" if pd.notna(x) and str(x).replace('.','').isdigit() else str(x)
+                lambda x: f"{int(x):,}" if pd.notna(x) and str(x).replace('.','').isdigit() else str(x)
             )
         
         # Format gene counts with commas

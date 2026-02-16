@@ -357,6 +357,12 @@ def fetch_cellxgene_datasets(limit: int = 100) -> Optional[pd.DataFrame]:
                 display_df['Organism'].str.contains('Homo sapiens', case=False, na=False)
             ]
         
+        # Filter to only include single cell or single nuclei datasets
+        if 'Suspension Type' in display_df.columns and len(display_df) > 0:
+            display_df = display_df[
+                display_df['Suspension Type'].str.contains('cell|nucleus', case=False, na=False, regex=True)
+            ]
+        
         # Sort by cell count descending
         if 'Cell Count' in display_df.columns and len(display_df) > 0:
             display_df = display_df.sort_values('Cell Count', ascending=False)

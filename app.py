@@ -22,35 +22,56 @@ def load_example_datasets() -> pd.DataFrame:
     try:
         df = pd.read_csv(csv_path)
         
-        # Check if using old format and convert to new format
-        if 'dataset_title' in df.columns:
-            # Old format: dataset_title, dataset_description, n_cells, n_genes, data_path
-            df = df.rename(columns={
-                'dataset_title': 'Name',
-                'dataset_description': 'Description',
-                'n_cells': 'Cells',
-                'data_path': 'URL'
-            })
-            # Add missing columns with defaults
-            if 'Tissue' not in df.columns:
-                df['Tissue'] = 'N/A'
-            if 'Source' not in df.columns:
-                df['Source'] = 'Local Dataset'
-            # Format cell counts
-            df['Cells'] = df['Cells'].apply(lambda x: f"~{x:,}" if pd.notna(x) else 'N/A')
+        # Map CSV columns to app columns
+        column_mapping = {
+            'dataset_title': 'Name',
+            'dataset_description': 'Description',
+            'tissue': 'Tissue',
+            'n_cells': 'Cells',
+            'n_genes': 'Genes',
+            'data_path': 'URL'
+        }
         
-        # Ensure URL column uses correct paths (should already be relative)
-        if 'URL' in df.columns:
-            # Paths are already relative to root, no need to prepend ./data/
-            pass
+        # Rename columns if they exist
+        df = df.rename(columns={k: v for k, v in column_mapping.items() if k in df.columns})
+        
+        # Add Source column if not present (extract from description or use default)
+        if 'Source' not in df.columns:
+            # Try to extract source from description (look for DOI or author names)
+            def extract_source(desc):
+                if 'DOI:' in str(desc):
+                    # Extract paper reference before DOI
+                    return str(desc).split('.')[0] + '.'
+                return 'Local Dataset'
+            df['Source'] = df['Description'].apply(extract_source) if 'Description' in df.columns else 'Local Dataset'
+        
+        # Format cell counts with commas
+        if 'Cells' in df.columns:
+            df['Cells'] = df['Cells'].apply(
+                lambda x: f"~{int(x):,}" if pd.notna(x) and str(x).replace('.','').isdigit() else str(x)
+            )
+        
+        # Format gene counts with commas
+        if 'Genes' in df.columns:
+            df['Genes'] = df['Genes'].apply(
+                lambda x: f"{int(x):,}" if pd.notna(x) and str(x).replace('.','').isdigit() else str(x)
+            )
+        
+        # Ensure all required columns exist
+        required_cols = ['Name', 'Cells', 'Tissue', 'Description', 'Source', 'URL']
+        for col in required_cols:
+            if col not in df.columns:
+                df[col] = 'N/A'
         
         return df
     except FileNotFoundError:
         st.warning(f"Could not find {csv_path}. Using empty dataset list.")
-        return pd.DataFrame(columns=['Name', 'Cells', 'Tissue', 'Description', 'Source', 'URL'])
+        return pd.DataFrame(columns=['Name', 'Cells', 'Tissue', 'Genes', 'Description', 'Source', 'URL'])
     except Exception as e:
         st.error(f"Error loading example datasets: {e}")
-        return pd.DataFrame(columns=['Name', 'Cells', 'Tissue', 'Description', 'Source', 'URL'])
+        import traceback
+        traceback.print_exc()
+        return pd.DataFrame(columns=['Name', 'Cells', 'Tissue', 'Genes', 'Description', 'Source', 'URL'])
 
 EXAMPLE_DATASETS = load_example_datasets()
 
@@ -413,7 +434,7 @@ def display_dataset_loading() -> None:
         """)
         
         # Display columns for the table (exclude URL from display)
-        display_cols = ['Name', 'Cells', 'Tissue', 'Description', 'Source']
+        display_cols = ['Name', 'Cells', 'Genes', 'Tissue', 'Description', 'Source']
         
         # Configure AgGrid for example datasets
         gb = GridOptionsBuilder.from_dataframe(EXAMPLE_DATASETS[display_cols])
@@ -422,11 +443,12 @@ def display_dataset_loading() -> None:
         gb.configure_default_column(resizable=True, filterable=True, sortable=True)
         
         # Configure column widths
-        gb.configure_column('Name', minWidth=180)
-        gb.configure_column('Cells', maxWidth=100)
+        gb.configure_column('Name', minWidth=200)
+        gb.configure_column('Cells', maxWidth=110)
+        gb.configure_column('Genes', maxWidth=110)
         gb.configure_column('Tissue', maxWidth=150)
-        gb.configure_column('Description', minWidth=200)
-        gb.configure_column('Source', minWidth=200)
+        gb.configure_column('Description', minWidth=250)
+        gb.configure_column('Source', minWidth=180)
         
         grid_options = gb.build()
         
@@ -457,9 +479,9 @@ def display_dataset_loading() -> None:
             with col1:
                 st.metric("Cells", selected_row['Cells'])
             with col2:
-                st.metric("Tissue", selected_row['Tissue'])
+                st.metric("Genes", selected_row.get('Genes', 'N/A'))
             with col3:
-                st.metric("Source", selected_row['Source'][:30] + "..." if len(selected_row['Source']) > 30 else selected_row['Source'])
+                st.metric("Tissue", selected_row['Tissue'])
             
             st.caption(f"**Description:** {selected_row['Description']}")
             

@@ -486,7 +486,7 @@ def display_dataset_loading() -> None:
             
             col1, col2, col3 = st.columns([1, 1, 2])
             with col1:
-                if st.button("📥 Load Selected Dataset", use_container_width=True, type="primary"):
+                if st.button("📥 Load Selected Dataset", use_container_width=True, type="primary", key="load_example_dataset"):
                     load_dataset(selected_row['URL'], selected_row['Name'])
             with col2:
                 st.info(f"Source: `{selected_row['Source']}`")
@@ -593,7 +593,7 @@ def display_dataset_loading() -> None:
                 
                 col1, col2, col3 = st.columns([1, 1, 2])
                 with col1:
-                    if st.button("📥 Load Selected Dataset", use_container_width=True, type="primary"):
+                    if st.button("📥 Load Selected Dataset", use_container_width=True, type="primary", key="load_cellxgene_dataset"):
                         load_cellxgene_dataset_ui(
                             collection_id,
                             dataset_id,

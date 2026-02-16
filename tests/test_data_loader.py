@@ -17,7 +17,6 @@ from utils.data_loader import (
     load_dataset_from_file,
     save_dataset,
     get_dataset_summary,
-    get_available_datasets,
     _is_url,
 )
 
@@ -106,25 +105,6 @@ def test_load_nonexistent_file() -> None:
     """
     result = load_dataset_from_file("/nonexistent/path/file.h5ad")
     assert result is None
-
-
-def test_get_available_datasets() -> None:
-    """
-    Test get_available_datasets function.
-    
-    Verifies:
-        - Function returns a dictionary
-        - Example datasets are included
-        - Dataset entries have required keys
-    """
-    datasets = get_available_datasets()
-    
-    assert isinstance(datasets, dict)
-    
-    # Check for example datasets
-    assert 'PBMC3k (Example)' in datasets
-    assert 'path' in datasets['PBMC3k (Example)']
-    assert 'description' in datasets['PBMC3k (Example)']
 
 
 def test_load_scanpy_example_dataset() -> None:
@@ -338,11 +318,6 @@ class TestEdgeCases:
         # Try to save to a path that doesn't allow writing
         result = save_dataset(sample_adata, "/root/readonly/file.h5ad")
         assert result is False
-    
-    def test_get_available_datasets_returns_dict(self) -> None:
-        """Test get_available_datasets always returns a dictionary."""
-        datasets = get_available_datasets()
-        assert isinstance(datasets, dict)
     
     def test_summary_with_categorical_obs(self) -> None:
         """Test summary with categorical observations."""

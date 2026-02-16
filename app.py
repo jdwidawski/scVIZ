@@ -8,7 +8,6 @@ import pandas as pd
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, DataReturnMode
 from utils.data_loader import (
     load_dataset_from_file, 
-    get_available_datasets,
     fetch_cellxgene_datasets,
     load_cellxgene_dataset
 )

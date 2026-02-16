@@ -12,9 +12,9 @@ scVIZ is a Streamlit-based interactive application for exploring and analyzing s
 ## ✨ Features
 
 ### 📥 Dataset Loading
-- **Upload local files**: Load h5ad format AnnData objects
-- **Example datasets**: Curated collection of human scRNA-seq datasets with UMAP embeddings
-- **CELLxGENE integration**: Browse and load datasets directly from CELLxGENE Discover
+- **Upload local files**: Load h5ad format AnnData objects or 10x Genomics h5 files
+- **Example datasets**: Curated collection of human scRNA-seq datasets from publications
+- **CELLxGENE integration**: Browse and load single-cell/nuclei datasets from CELLxGENE Discover
 
 ### 📊 Explore Dataset Contents
 - View dataset structure and metadata
@@ -95,11 +95,12 @@ pytest --cov=utils --cov=modules --cov-report=html
 ```
 scviz/
 ├── app.py                 # Main Streamlit application
+├── data/                  # Example datasets and CSV index
+│   └── available_datasets.csv  # Dataset registry
 ├── modules/               # Analysis modules
 │   ├── explore_dataset.py     # Dataset exploration
 │   ├── quality_control.py     # QC metrics and visualization
 │   ├── visualize_dataset.py   # UMAP/expression visualization
-│   ├── visualize_expression.py # Gene expression plots
 │   └── differential_expression.py # DE analysis
 ├── utils/                 # Utility functions
 │   └── data_loader.py         # Dataset I/O functions
@@ -109,6 +110,21 @@ scviz/
 ├── pyproject.toml         # Project configuration
 └── README.md
 ```
+
+## 📦 Example Datasets
+
+The app comes with a registry of example datasets in `data/available_datasets.csv`. 
+To add your own datasets:
+
+1. Place h5ad files in the `data/` directory
+2. Add entries to `data/available_datasets.csv`:
+
+```csv
+dataset_title,tissue,n_cells,n_genes,dataset_description,data_path
+My Dataset,Brain,50000,20000,"Description here",./data/my_dataset.h5ad
+```
+
+**Note**: Large h5ad files are not included in the repository. Download them separately or use the CELLxGENE integration to load datasets directly.
 
 ## 🔧 Development
 

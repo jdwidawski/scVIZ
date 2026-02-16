@@ -44,4 +44,3 @@ docs/build/
 .DS_Store
 Thumbs.db
 .python-version
-datasets.csv

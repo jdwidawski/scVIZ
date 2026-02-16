@@ -2,59 +2,19 @@
 Dataset loading utilities for scVIZ.
 
 Handles loading single-cell RNA-seq datasets from various sources.
+
+Copyright (c) 2026 Jakub Widawski
+Licensed under the MIT License.
 """
 import os
 import requests
-from typing import Dict, Optional, Union, List
+from typing import Dict, Optional, Union
 from pathlib import Path
 from urllib.parse import urlparse
 import pandas as pd
 import scanpy as sc
 from anndata import AnnData
 import tempfile
-
-
-def get_available_datasets() -> Dict[str, Dict[str, str]]:
-    """
-    Get a dictionary of available pre-configured datasets.
-    
-    Returns:
-        Dict[str, Dict[str, str]]: Dictionary mapping dataset names to their
-            metadata (path, description).
-    
-    Example:
-        >>> datasets = get_available_datasets()
-        >>> print(datasets['PBMC3k']['path'])
-        'data/pbmc3k.h5ad'
-    """
-    datasets = {}
-    
-    # Check for datasets in the data directory
-    data_dir = Path("data")
-    if data_dir.exists():
-        for h5ad_file in data_dir.glob("*.h5ad"):
-            dataset_name = h5ad_file.stem
-            datasets[dataset_name] = {
-                'path': str(h5ad_file),
-                'description': f'Dataset: {dataset_name}'
-            }
-    
-    # Add example datasets from scanpy if available
-    # Note: These are downloaded on-demand by scanpy
-    example_datasets = {
-        'PBMC3k (Example)': {
-            'path': 'scanpy:pbmc3k',
-            'description': '3k PBMCs from 10x Genomics'
-        },
-        'PBMC68k (Example)': {
-            'path': 'scanpy:pbmc68k_reduced',
-            'description': '68k PBMCs (reduced) from 10x Genomics'
-        }
-    }
-    
-    datasets.update(example_datasets)
-    
-    return datasets
 
 
 def load_dataset_from_file(file_path: Union[str, Path, object]) -> Optional[AnnData]:
@@ -186,89 +146,6 @@ def get_dataset_summary(adata: AnnData) -> Dict[str, any]:
     }
     
     return summary
-
-
-def load_dataset_table(file_path: Union[str, Path] = "datasets.csv") -> pd.DataFrame:
-    """
-    Load the dataset table from a CSV file.
-    
-    Parameters:
-        file_path (Union[str, Path]): Path to the CSV file containing dataset 
-            information. Defaults to "datasets.csv" in the project root.
-    
-    Returns:
-        pd.DataFrame: DataFrame with columns 'Dataset Name' and 'Path/URL'.
-            Returns empty DataFrame with correct schema if file doesn't exist.
-    
-    Example:
-        >>> df = load_dataset_table()
-        >>> print(df.columns)
-        Index(['Dataset Name', 'Path/URL'], dtype='object')
-    """
-    file_path = Path(file_path)
-    
-    if file_path.exists():
-        try:
-            df = pd.read_csv(file_path, dtype=str)
-            # Ensure correct columns exist
-            if 'Dataset Name' not in df.columns or 'Path/URL' not in df.columns:
-                print(f"Warning: {file_path} missing required columns. Creating empty table.")
-                return pd.DataFrame({
-                    'Dataset Name': pd.Series([], dtype='str'),
-                    'Path/URL': pd.Series([], dtype='str')
-                })
-            return df
-        except Exception as e:
-            print(f"Error loading dataset table from {file_path}: {e}")
-            return pd.DataFrame({
-                'Dataset Name': pd.Series([], dtype='str'),
-                'Path/URL': pd.Series([], dtype='str')
-            })
-    else:
-        # Return empty DataFrame with correct schema
-        return pd.DataFrame({
-            'Dataset Name': pd.Series([], dtype='str'),
-            'Path/URL': pd.Series([], dtype='str')
-        })
-
-
-def save_dataset_table(df: pd.DataFrame, file_path: Union[str, Path] = "datasets.csv") -> bool:
-    """
-    Save the dataset table to a CSV file.
-    
-    Parameters:
-        df (pd.DataFrame): DataFrame containing dataset information with columns
-            'Dataset Name' and 'Path/URL'.
-        file_path (Union[str, Path]): Path where the CSV file should be saved.
-            Defaults to "datasets.csv" in the project root.
-    
-    Returns:
-        bool: True if save was successful, False otherwise.
-    
-    Example:
-        >>> df = pd.DataFrame({
-        ...     'Dataset Name': ['My Dataset'],
-        ...     'Path/URL': ['path/to/data.h5ad']
-        ... })
-        >>> success = save_dataset_table(df)
-        >>> if success:
-        ...     print("Table saved successfully")
-    """
-    try:
-        file_path = Path(file_path)
-        # Ensure parent directory exists
-        file_path.parent.mkdir(parents=True, exist_ok=True)
-        
-        # Remove empty rows before saving
-        df_clean = df.dropna(how='all')
-        df_clean = df_clean[df_clean['Dataset Name'].str.strip() != '']
-        
-        df_clean.to_csv(file_path, index=False)
-        return True
-    
-    except Exception as e:
-        print(f"Error saving dataset table to {file_path}: {e}")
-        return False
 
 
 def fetch_cellxgene_datasets(limit: int = 100) -> Optional[pd.DataFrame]:

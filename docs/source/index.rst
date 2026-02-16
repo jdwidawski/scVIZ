@@ -12,15 +12,23 @@ scVIZ Documentation
 Features
 --------
 
+� **Dataset Loading**
+   Load datasets from local h5ad/h5 files, curated example datasets from publications,
+   or browse and download directly from CELLxGENE Discover portal.
+
 📊 **Explore Dataset Contents**
    Examine the internal structure of AnnData objects including cell metadata (obs), 
    gene metadata (var), expression matrices (X), and dimensionality reductions (obsm/varm).
 
-🗺️ **Visualize Dataset**
-   Create interactive UMAP visualizations with metadata coloring and gene expression 
-   overlays. Support for multi-gene comparison and customizable styling.
+🔍 **Quality Control**
+   Compute QC metrics (total counts, genes detected, mitochondrial %), perform cell 
+   cycle scoring, and visualize distributions with interactive UMAP and violin plots.
 
-🧬 **Differential Expression**
+🗺️ **Visualize Dataset**
+   Create interactive UMAP/t-SNE visualizations with metadata coloring and gene expression 
+   overlays. Support for lasso selection and customizable styling.
+
+📈 **Differential Expression**
    Perform pseudobulk differential expression analysis using PyDESeq2 with 
    interactive volcano plots and downloadable results.
 
@@ -57,11 +65,11 @@ Loading Data
 
 scVIZ supports multiple data loading methods:
 
-1. **Upload File**: Upload an h5ad file from your computer
-2. **Example Datasets**: Load from curated example datasets with UMAP embeddings
-3. **CELLxGENE Datasets**: Browse and download from CELLxGENE Discover portal
+1. **Upload File**: Upload h5ad or 10x h5 files from your computer
+2. **Example Datasets**: Load from curated example datasets from publications
+3. **CELLxGENE Datasets**: Browse and download single-cell/nuclei datasets from CELLxGENE Discover
 
-All datasets must be in AnnData h5ad format.
+All datasets must be in AnnData h5ad format or 10x Genomics h5 format.
 
 User Guide
 ----------
